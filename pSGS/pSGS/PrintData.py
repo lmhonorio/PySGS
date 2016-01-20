@@ -20,7 +20,7 @@ class clsPrint(object):
 
 		for i in range(len(box)):
 			plt.plot(OBHB[i].data[:,0],OBHB[i].data[:,1],plot_repo[i])
-			plt.plot(box[i][:,0],box[i][:,1],plotColor[i]+'-')
+			plt.plot(box[i][:,0],box[i][:,1],plot_color[i]+'-')
 
 
 		
