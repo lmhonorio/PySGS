@@ -7,14 +7,14 @@ class clsOBHB(DataModel.clsData,object):
 
 
 
-	def __init__(self, setid = 0, incollision = 0, breaks = 0, data = [], objData = DataModel.clsData()):
+	def __init__(self, set_id = 0, in_collision = 0, breaks = 0, data = [], obj_data = DataModel.clsData()):
 
-		if len(objData.data)==0:
-			DataModel.clsData.__init__(self,setid,incollision,breaks,data)
+		if len(obj_data.data)==0:
+			DataModel.clsData.__init__(self,set_id,in_collision,breaks,data)
 		else:
-			DataModel.clsData.__init__(self,objData.setid,objData.incollision,objData.breaks,objData.data)
+			DataModel.clsData.__init__(self,obj_data.set_id,obj_data.in_collision,obj_data.breaks,obj_data.data)
 			
-		self.projections = Projections.clsProjectionOverAxis(self.data,self.WordRefcenter,self.Pi)
+		self.projections = Projections.clsProjectionOverAxis(self.data,self.word_ref_center,self.pi)
 
 		#prj = Projections.clsProjectionOverAxis(List2.data,List2.xmean,List2.Pi)
 
@@ -26,7 +26,7 @@ class clsOBHB(DataModel.clsData,object):
 
 
 	def returnBox(self):
-		return np.array(self.projections.returnOrientedBoundingBox(self.Pi)) 
+		return np.array(self.projections.returnOrientedBoundingBox(self.pi)) 
 
 
 

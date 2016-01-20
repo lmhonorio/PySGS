@@ -10,19 +10,19 @@ t0 = time.clock()
 
 myData = DataManagement.clsDataIO()
 
-ListCls = myData.returnBananaDataset((100,100), (2.0,1.0), 1.7, 0.2)
+listcls = myData.returnBananaDataset((100,100), (2.0,1.0), 1.7, 0.2)
 
 
-OBHB = [OrientedBoundHyperBox.clsOBHB(objData = idata)	for idata in ListCls]
+OBHB = [OrientedBoundHyperBox.clsOBHB(obj_data = idata)	for idata in listcls]
 
 
-PrintData.clsPrint.print2dModel(OBHB)
+PrintData.clsPrint.print2dmodel(OBHB)
 
 
 
 print(time.clock() - t0)
 print(ListCls[0].xmean)
-print(ListCls[0].WordRefcenter)
+print(ListCls[0].word_ref_center)
 
 
 
