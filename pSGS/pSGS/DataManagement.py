@@ -46,7 +46,7 @@ COMMONLY USED COMMANDS
 
 #a n-dimentional array where columns are features and lines new instances
 
-	def initCheckerBoardFunction(self, Ndata : int, nx : int, ny : int, delta : float):
+	def returnCheckerBoardFunction(self, Ndata : int, nx : int, ny : int, delta : float):
 		"""initCheckerBoardFunction
 
 	Generates two classes similar to a chekerBoard table. One classe would be in the same position 
