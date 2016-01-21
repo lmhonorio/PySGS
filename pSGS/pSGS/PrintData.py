@@ -16,7 +16,9 @@ class clsPrint(object):
 		plot_style = ['o', '*', 'h', 's', 'd'] 
 		plot_repo = [ x+y for x in plot_color for y in plot_style]
 
+
 		box = [iobb.returnBox()	 for iobb in OBHB]
+
 
 		for i in range(len(box)):
 			plt.plot(OBHB[i].data[:,0],OBHB[i].data[:,1],plot_repo[i])

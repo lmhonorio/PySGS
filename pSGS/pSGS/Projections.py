@@ -12,6 +12,7 @@ class clsProjectionOverAxis(object):
 		self.max = []
 		self.delta_lambda = []
 		self.volume = 1.0
+		self.box_ref_center = []
 		self.dimension = data.shape[1]
 
 		for i in range(0,self.dimension):
@@ -33,7 +34,7 @@ class clsProjectionOverAxis(object):
 
 
 	def myAxis(self, i:int, axis:np.ndarray):
-		return self.delta_lambda[i] * axis[i,:]
+		return  self.delta_lambda[i] * axis[i,:]
 
 
 	def returnOrientedBoundingBox(self ,axis : np.ndarray):
