@@ -33,7 +33,7 @@ class clsProjectionOverAxis(object):
 		#self.center = center + 0.5 * np.dot(np.array(self.min) + np.array(self.max),axis)
 		#o min e max se referem ao centro na coordenada do box, para a coordenada do mundo devemos transformar
 		# de acordo com o centro do mundo e a matriz de rotação dada pelos autovetores.
-		self.box_ref_center = world_ref_center + 0.5 * np.dot(self.cov.transpose(),np.array(self.min) + np.array(self.max))
+		self.box_ref_center = world_ref_center + 0.5 * np.dot(self.pi.transpose(),np.array(self.min) + np.array(self.max))
 
 
 	def improveDataFitness(self):
