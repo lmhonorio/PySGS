@@ -13,14 +13,14 @@ class clsProjectionOverAxis(object):
 		self.volume = 1.0
 		self.box_ref_center = []
 		self.dimension = data.shape[1]
-		self.axes = np.cov(data.transpose())
-		w, v = np.linalg.eig(self.axes)
+		self.cov = np.cov(data.transpose())
+		w, v = np.linalg.eig(self.cov)
 		self.pi = v
 		self.Lambda = w
-		self.mod_pi = [np.linalg.norm(pi) for pi in self.axes]
+		self.mod_pi = [np.linalg.norm(pi) for pi in self.cov]
 
 		for i in range(0,self.dimension):
-			projection_over_pi = np.array(np.dot(self.data_to_world_ref_center, self.axes[i,:]) / self.mod_pi[i])
+			projection_over_pi = np.array(np.dot(self.data_to_world_ref_center, self.pi[i,:]) / self.mod_pi[i])
 			vmin = projection_over_pi.min(0)
 			vmax = projection_over_pi.max(0)
 			self.projection_over_pi.append(projection_over_pi)
@@ -33,7 +33,7 @@ class clsProjectionOverAxis(object):
 		#self.center = center + 0.5 * np.dot(np.array(self.min) + np.array(self.max),axis)
 		#o min e max se referem ao centro na coordenada do box, para a coordenada do mundo devemos transformar
 		# de acordo com o centro do mundo e a matriz de rotação dada pelos autovetores.
-		self.box_ref_center = world_ref_center + 0.5 * np.dot(self.axes.transpose(),np.array(self.min) + np.array(self.max))
+		self.box_ref_center = world_ref_center + 0.5 * np.dot(self.cov.transpose(),np.array(self.min) + np.array(self.max))
 
 
 	def improveDataFitness(self):
