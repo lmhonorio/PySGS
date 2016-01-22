@@ -19,6 +19,7 @@ class clsPrint(object):
 
 		box = [iobb.returnBox()	 for iobb in OBHB]
 
+	
 
 		for i in range(len(box)):
 			plt.plot(OBHB[i].data[:,0],OBHB[i].data[:,1],plot_repo[i])
@@ -27,5 +28,5 @@ class clsPrint(object):
 
 		
 		plt.axis('equal')
-
+		
 		plt.show()

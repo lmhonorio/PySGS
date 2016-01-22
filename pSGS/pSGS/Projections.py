@@ -1,5 +1,6 @@
 import DataModel
 import numpy as np
+import copy
 
 class clsProjectionOverAxis(object):
 	"""description of class"""
@@ -14,7 +15,7 @@ class clsProjectionOverAxis(object):
 		self.box_ref_center = []
 		self.dimension = data.shape[1]
 		self.reference = world_ref_center
-		self.updateAxesAndProjections(data)
+		self.updateAxesAndProjections(data,world_ref_center)
 
 		#self.cov = np.cov(data.transpose())
 		#w, v = np.linalg.eig(self.cov)
@@ -55,7 +56,9 @@ class clsProjectionOverAxis(object):
 
 		self.__iextern = []
 
-
+		self.min = []
+		self.max = []
+		self.delta_lambda = []
 
 		for i in range(0,self.dimension):
 			projection_over_pi = np.array(np.dot(self.data_to_world_ref_center, self.pi[i,:]) / self.mod_pi[i])
@@ -77,13 +80,15 @@ class clsProjectionOverAxis(object):
 
 
 	def improveDataFitness(self):
-		ext_points = []
-		ext_points.append(self.data_to_world_ref_center[self.__iextern,:])
+
+		old = copy.deepcopy(self)
+		ext_points = self.data_to_world_ref_center[self.__iextern,:]
 		ext_array = np.array(ext_points)
 		self.updateAxesAndProjections(ext_array, self.reference)
+		if np.prod(self.delta_lambda) > np.prod(old.delta_lambda):
+			self = copy.deepcopy(old)
 
-
-
+		return self
 		#self.cov = np.cov(ext_array.transpose())
 		#w, v = np.linalg.eig(self.cov)
 		#self.pi = v
@@ -105,6 +110,10 @@ class clsProjectionOverAxis(object):
 		point.append(self.box_ref_center + self.myAxis(0) + self.myAxis(1))
 
 		return point;
+
+	@property
+	def box_volume(self):
+		return np.prod(self.delta_lambda)
 
 	@property
 	def density(self):
