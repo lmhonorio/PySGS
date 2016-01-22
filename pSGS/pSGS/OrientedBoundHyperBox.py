@@ -17,7 +17,7 @@ class clsOBHB(DataModel.clsData, object):
 			DataModel.clsData.__init__(self,obj_data.set_id,obj_data.in_collision,obj_data.breaks,obj_data.data)
 		
 				
-		self.projections = Projections.clsProjectionOverAxis(self.data,self.word_ref_center,self.pi)
+		self.projections = Projections.clsProjectionOverAxis(self.data,self.word_ref_center)
 
 		#prj = Projections.clsProjectionOverAxis(List2.data,List2.xmean,List2.Pi)
 
@@ -29,10 +29,10 @@ class clsOBHB(DataModel.clsData, object):
 
 
 	def returnBox(self):
-		return np.array(self.projections.returnOrientedBoundingBox(self.pi)) 
+		return np.array(self.projections.returnOrientedBoundingBox()) 
 
 	def breakThisBondingBoxUsingKDE(self):
-		idx_max_lambda =  np.argmax(self.Lambda)
+		idx_max_lambda =  np.argmax(self.projections.Lambda)
 		c_axis = np.array(self.projections.projection_over_pi[idx_max_lambda])
 		i_break = self.kernelDensityEstimation()
 
@@ -60,7 +60,7 @@ class clsOBHB(DataModel.clsData, object):
 	def kernelDensityEstimation(self, do_plot = False):
 		
 		#define biggest axis and get its data
-		idx_max_lambda =  np.argmax(self.Lambda)
+		idx_max_lambda =  np.argmax(self.projections.Lambda)
 		c_axis = np.array(self.projections.projection_over_pi[idx_max_lambda])
 
 		#get the grid to project onto

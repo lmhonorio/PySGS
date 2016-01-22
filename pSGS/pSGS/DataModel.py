@@ -11,9 +11,9 @@ class clsData(object):
 		self.data =  np.array(data)
 		self.x_mean = np.array(0)
 		self.word_ref_center = np.array(0)
-		self.cov = np.array(0)
-		self.pi = np.array(0)
-		self.Lambda = np.array(0)
+		#self.cov = np.array(0)
+		#self.pi = np.array(0)
+		#self.Lambda = np.array(0)
 
 		self.setData(data)
 
@@ -24,16 +24,16 @@ class clsData(object):
 			self.data = np.array(data)
 		if self.data.size > 0:
 			self.cov = np.cov(self.data.transpose())
-			w, v = np.linalg.eig(self.cov)
-			self.pi = v
-			self.Lambda = w
+			#w, v = np.linalg.eig(self.cov)
+			#self.pi = v
+			#self.Lambda = w
 			self.x_mean = self.data.mean(0)
 			min = self.data.min(0)
 			max = self.data.max(0)
 			self.word_ref_center = (max + min)/2.0
 
 
-
+	
 	def addItem(self, item):
 		if self.data is None:
 			self.data = np.array(item) 

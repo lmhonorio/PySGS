@@ -4,9 +4,8 @@ import numpy as np
 class clsProjectionOverAxis(object):
 	"""description of class"""
 
-	def __init__(self, data :np.ndarray , world_ref_center:np.ndarray , axis:np.ndarray):
+	def __init__(self, data :np.ndarray , world_ref_center:np.ndarray ):
 		self.data_to_world_ref_center = data - world_ref_center
-		self.mod_pi = [np.linalg.norm(pi) for pi in axis]
 		self.projection_over_pi = []
 		self.min = []
 		self.max = []
@@ -14,9 +13,14 @@ class clsProjectionOverAxis(object):
 		self.volume = 1.0
 		self.box_ref_center = []
 		self.dimension = data.shape[1]
+		self.axes = np.cov(data.transpose())
+		w, v = np.linalg.eig(self.axes)
+		self.pi = v
+		self.Lambda = w
+		self.mod_pi = [np.linalg.norm(pi) for pi in self.axes]
 
 		for i in range(0,self.dimension):
-			projection_over_pi = np.array(np.dot(self.data_to_world_ref_center, axis[i,:]) / self.mod_pi[i])
+			projection_over_pi = np.array(np.dot(self.data_to_world_ref_center, self.axes[i,:]) / self.mod_pi[i])
 			vmin = projection_over_pi.min(0)
 			vmax = projection_over_pi.max(0)
 			self.projection_over_pi.append(projection_over_pi)
@@ -29,21 +33,25 @@ class clsProjectionOverAxis(object):
 		#self.center = center + 0.5 * np.dot(np.array(self.min) + np.array(self.max),axis)
 		#o min e max se referem ao centro na coordenada do box, para a coordenada do mundo devemos transformar
 		# de acordo com o centro do mundo e a matriz de rotação dada pelos autovetores.
-		self.box_ref_center = world_ref_center + 0.5 * np.dot(axis.transpose(),np.array(self.min) + np.array(self.max))
+		self.box_ref_center = world_ref_center + 0.5 * np.dot(self.axes.transpose(),np.array(self.min) + np.array(self.max))
 
 
+	def improveDataFitness(self):
+		i = 1
+		pass
+	
 
-	def myAxis(self, i:int, axis:np.ndarray):
-		return  self.delta_lambda[i] * axis[i,:]
+	def myAxis(self, i:int):
+		return  self.delta_lambda[i] * self.pi[i,:]
 
 
-	def returnOrientedBoundingBox(self ,axis : np.ndarray):
+	def returnOrientedBoundingBox(self):
 		point = []
-		point.append(self.box_ref_center + self.myAxis(0,axis) + self.myAxis(1,axis))
-		point.append(self.box_ref_center - self.myAxis(0,axis) + self.myAxis(1,axis))
-		point.append(self.box_ref_center - self.myAxis(0,axis) - self.myAxis(1,axis))
-		point.append(self.box_ref_center + self.myAxis(0,axis) - self.myAxis(1,axis))
-		point.append(self.box_ref_center + self.myAxis(0,axis) + self.myAxis(1,axis))
+		point.append(self.box_ref_center + self.myAxis(0) + self.myAxis(1))
+		point.append(self.box_ref_center - self.myAxis(0) + self.myAxis(1))
+		point.append(self.box_ref_center - self.myAxis(0) - self.myAxis(1))
+		point.append(self.box_ref_center + self.myAxis(0) - self.myAxis(1))
+		point.append(self.box_ref_center + self.myAxis(0) + self.myAxis(1))
 
 		return point;
 
