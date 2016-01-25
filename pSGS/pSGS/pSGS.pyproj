@@ -38,6 +38,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="pSGS.py" />
+    <Compile Include="SeparatingAxes.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tips\hottips.txt" />

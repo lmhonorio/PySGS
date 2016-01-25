@@ -1,8 +1,12 @@
 import numpy as np
-import DataModel
-import Projections
 import  matplotlib.pyplot as plt
 from scipy import stats
+
+import OrientedBoundHyperBox
+import SeparatingAxes
+import DataModel
+import Projections
+
 
 class clsOBHB(DataModel.clsData, object):
 	"""description of class"""
@@ -19,6 +23,7 @@ class clsOBHB(DataModel.clsData, object):
 				
 		self.projections = Projections.clsProjectionOverAxis(self.data,self.word_ref_center)
 
+
 		#prj = Projections.clsProjectionOverAxis(List2.data,List2.xmean,List2.Pi)
 
 
@@ -31,13 +36,17 @@ class clsOBHB(DataModel.clsData, object):
 	def returnBox(self):
 		return np.array(self.projections.returnOrientedBoundingBox()) 
 
+
+
 	def breakThisBondingBoxUsingKDE(self):
+
 		idx_max_lambda =  np.argmax(self.projections.Lambda)
 		c_axis = np.array(self.projections.projection_over_pi[idx_max_lambda])
 		i_break = self.kernelDensityEstimation()
 
 		new_data_1 = []
 		new_data_2 = []
+
 		for i in range(0,self.dataLen):
 			if c_axis[i] < i_break:
 				new_data_1.append(self.data[i,:])
@@ -55,7 +64,6 @@ class clsOBHB(DataModel.clsData, object):
 		new_obb_2 = clsOBHB(obj_data = pcls2)
 
 		return new_obb_1,new_obb_2
-
 
 	def kernelDensityEstimation(self, do_plot = False):
 		
@@ -92,7 +100,13 @@ class clsOBHB(DataModel.clsData, object):
 		return x_grid[i_min[i_lowest]]
 
 
+	
 	def kdeLocalZeroGradient(self,kde:np.ndarray):
+		"""
+		@kde:ndarray
+		returns an int
+		"""
+		
 		i_len = len(kde)
 		i_min = []
 		i_max = []
@@ -115,6 +129,58 @@ class clsOBHB(DataModel.clsData, object):
 
 
 
+
+	def testCollision(self, other, rec):
+		"""
+		@other: clsOBHB
+		@rec: bool
+		returns an int
+		"""
+		separating_axes = SeparatingAxes.clsSeparatingAxesList()
+		 
+		vCenter = self.word_ref_center - other.word_ref_center
+		Axes = []
+		ok = 1
+		MtrCol = []
+		Dcenter = []
+		dcol = []
+		M12 = 0;
+		M21 = 0;
+		#for the two OBHBs
+		for i in range(0,self.dimension):
+			Dcenter.append(np.dot(vCenter,self.projections.pi[i,:])/np.linalg.norm(self.projections.pi[i,:]))
+			
+			#for each dimension
+			#projection at each
+			sum_projection_over_pi = 0
+			for j in range(0,self.dimension):
+				sum_projection_over_pi += abs(np.dot(self.projections.pi[i,:],other.projections.axes[j])/np.linalg.norm(self.projections.pi[i,:]))
+
+
+			dcol.append(abs(Dcenter[i]) - sum_projection_over_pi - abs(self.projections.Lambda[i]))
+			M12 = abs(min(dcol[i],0))
+			MtrCol.append(M12)
+			if (dcol[i] > 0):
+				ok = 0
+				separating_axes.addAxis(i,self.set_id, other.set_id, dcol[i], np.sign(Dcenter[i]))
+
+		if rec == True:
+			ok2, rAxis , M21 = other.testCollision(self,False)
+			separating_axes.addAxis(separatin_axis = rAxis)
+			ok = min(ok, ok2)
+			MtrCol.append(M21[0])
+
+
+		return ok, separating_axes, MtrCol 
+				
+				
+
+
+
+
+
+		
+		
 
 
 
