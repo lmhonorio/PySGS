@@ -76,7 +76,7 @@ class clsSeparatingAxesList(object):
 
 
 
-	def addAxis(self, n_pi, id_hb_1, id_hb_2, separating_distance, centers_distance, separatin_axis = None ):
+	def addAxis(self, n_pi=0, id_hb_1=0, id_hb_2=0, separating_distance=0.0, centers_distance=0.0, separatin_axis = None ):
 		"""
 		@n_pi: int
 		@id_hb_1: int
@@ -87,6 +87,8 @@ class clsSeparatingAxesList(object):
 		if separatin_axis == None:
 			new_axis = SeparatingAxes.clsSeparatingAxis(n_pi, id_hb_1, id_hb_2, separating_distance, centers_distance)
 			self.separatin_axes.append(new_axis)
+		else:
+			self.separatin_axes.append(separatin_axis)
 
 
 	def clearAxes(self):

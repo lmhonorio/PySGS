@@ -127,8 +127,11 @@ class clsOBHB(DataModel.clsData, object):
 
 		return i_min,i_max
 
-
-
+	@staticmethod
+	def improveDataFitness(list_of_obb):
+		for iobb in list_of_obb:
+			iobb = iobb.projections.improveDataFitness()
+		
 
 	def testCollision(self, other, rec):
 		"""
@@ -157,7 +160,7 @@ class clsOBHB(DataModel.clsData, object):
 				sum_projection_over_pi += abs(np.dot(self.projections.pi[i,:],other.projections.axes[j])/np.linalg.norm(self.projections.pi[i,:]))
 
 
-			dcol.append(abs(Dcenter[i]) - sum_projection_over_pi - abs(self.projections.Lambda[i]))
+			dcol.append(abs(Dcenter[i]) - abs(sum_projection_over_pi) - abs(self.projections.delta_lambda[i]))
 			M12 = abs(min(dcol[i],0))
 			MtrCol.append(M12)
 			if (dcol[i] > 0):
@@ -166,7 +169,8 @@ class clsOBHB(DataModel.clsData, object):
 
 		if rec == True:
 			ok2, rAxis , M21 = other.testCollision(self,False)
-			separating_axes.addAxis(separatin_axis = rAxis)
+			for individual_axis in rAxis.separatin_axes:
+				separating_axes.addAxis(separatin_axis = individual_axis)
 			ok = min(ok, ok2)
 			MtrCol.append(M21[0])
 

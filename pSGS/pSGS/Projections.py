@@ -72,7 +72,7 @@ class clsProjectionOverAxis(object):
 			self.max.append(vmax)
 			delta_lambda = (np.array(vmax) - np.array(vmin))/2.0
 			self.delta_lambda.append(delta_lambda)
-			self.volume *= self.volume * delta_lambda 
+			self.volume = self.volume * delta_lambda 
 			self.axes.append(delta_lambda*self.pi[i,:])
 
 		#self.center = center + 0.5 * np.dot(np.array(self.min) + np.array(self.max),axis)
