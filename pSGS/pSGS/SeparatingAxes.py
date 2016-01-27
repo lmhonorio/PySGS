@@ -1,4 +1,5 @@
 import SeparatingAxes
+import numpy as np
 
 class clsSeparatingAxis(object):
 	"""clsSeparatingAxis
@@ -94,6 +95,55 @@ class clsSeparatingAxesList(object):
 	def clearAxes(self):
 		self.separatin_axes.clear()
 
-	
 
-		
+class clsCollisionTest(object):
+	
+	def __init__(self):
+		pass
+
+	
+	@staticmethod
+	def CollisionTest(obhb_1, obhb_2, rec):
+		"""
+		@obhb_1: clsOBHB
+		@obhb_2: clsOBHB
+		@rec: bool
+		returns an int
+		"""
+		separating_axes = SeparatingAxes.clsSeparatingAxesList()
+		 
+		vCenter = obhb_1.word_ref_center - obhb_2.word_ref_center
+		Axes = []
+		ok = 1
+		MtrCol = []
+		Dcenter = []
+		dcol = []
+		M12 = 0;
+		M21 = 0;
+		#for the two OBHBs
+		for i in range(0,obhb_1.dimension):
+			Dcenter.append(np.dot(vCenter,obhb_1.projections.pi[i,:])/np.linalg.norm(obhb_1.projections.pi[i,:]))
+			
+			#for each dimension
+			#projection at each
+			sum_projection_over_pi = 0
+			for j in range(0,obhb_1.dimension):
+				sum_projection_over_pi += abs(np.dot(obhb_1.projections.pi[i,:],obhb_2.projections.axes[j])/np.linalg.norm(obhb_1.projections.pi[i,:]))
+
+
+			dcol.append(abs(Dcenter[i]) - abs(sum_projection_over_pi) - abs(obhb_1.projections.delta_lambda[i]))
+			M12 = abs(min(dcol[i],0))
+			MtrCol.append(M12)
+			if (dcol[i] > 0):
+				ok = 0
+				separating_axes.addAxis(i,obhb_1.set_id, obhb_2.set_id, dcol[i], np.sign(Dcenter[i]))
+
+		if rec == True:
+			ok2, rAxis , M21 = obhb_2.testCollision(obhb_1,False)
+			for individual_axis in rAxis.separatin_axes:
+				separating_axes.addAxis(separatin_axis = individual_axis)
+			ok = min(ok, ok2)
+			MtrCol.append(M21[0])
+
+
+		return ok, separating_axes, MtrCol 

@@ -15,6 +15,9 @@ class clsOBHB(DataModel.clsData, object):
 
 	def __init__(self, set_id = 0, in_collision = 0, breaks = 0, data = [], obj_data = DataModel.clsData()):
 
+		self.id = 0
+
+		#DataModel.clsData.__init__ = inicializa com a contrutora da clase base
 		if len(obj_data.data)==0:
 			DataModel.clsData.__init__(self,set_id,in_collision,breaks,data)
 		else:
@@ -27,6 +30,8 @@ class clsOBHB(DataModel.clsData, object):
 		#prj = Projections.clsProjectionOverAxis(List2.data,List2.xmean,List2.Pi)
 
 
+	def changeID(self,new_id:int):
+		self.id = new_id
 
 	def evaluateBoundingBox(self):
 		if dimension == 0:
@@ -178,7 +183,28 @@ class clsOBHB(DataModel.clsData, object):
 		return ok, separating_axes, MtrCol 
 				
 				
+class clsListofOBHB(object):
 
+	def __init__(self):
+		self.list_of_obhs = []
+
+	def addOBHB(self, set_id = 0, in_collision = 0, breaks = 0, data = [], obj_data = DataModel.clsData(), data_list = []):
+		
+		if len(obj_data.data)==0:
+			new_data = DataModel.clsData(set_id,in_collision,breaks,data)
+		else:
+			new_data = DataModel.clsData(obj_data.set_id,obj_data.in_collision,obj_data.breaks,obj_data.data)
+
+		if len(data_list) > 0:
+			for idata in data_list:
+				new_data = DataModel.clsData(obj_data.set_id,obj_data.in_collision,obj_data.breaks,obj_data.data)
+			pass
+
+		new_obhb = clsOBHB(obj_data = new_data)
+		new_obhb.set_id(len(self.list_of_obhs))
+		self.list_of_obhs.append(new_obhb)
+		pass
+		#self.list_of_obhs.append (new
 
 
 

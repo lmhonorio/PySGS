@@ -31,11 +31,9 @@ print(obbs[1].projections.box_volume)
 #obbs[1].projections = obbs[1].projections.improveDataFitness()
    
 
-ok, separating_axes, MtrCol = obbs[0].testCollision(obbs[1],True)
+ok, separating_axes, MtrCol = SeparatingAxes.clsCollisionTest.CollisionTest(obbs[0],obbs[1],True)
 
 print('colisao: ' + str(ok) + ' , ' + str(len(separating_axes.separatin_axes)))
-PrintData.clsPrint.print2dmodel(obbs)
-
 
 print(time.clock() - t0)
 print(list_cls[0].x_mean)
@@ -44,6 +42,7 @@ print(list_cls[0].word_ref_center)
 
 
 print(time.clock() - t0)
+PrintData.clsPrint.print2dmodel(obbs)
 i=1
 
 
