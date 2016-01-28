@@ -185,26 +185,43 @@ class clsOBHB(DataModel.clsData, object):
 				
 class clsListofOBHB(object):
 
-	def __init__(self):
-		self.list_of_obhs = []
+	def __init__(self, data_list = []):
+		self.obhbs = []
+		if len(data_list) > 0:
+			self.addOBHB(data_list = data_list)
 
 	def addOBHB(self, set_id = 0, in_collision = 0, breaks = 0, data = [], obj_data = DataModel.clsData(), data_list = []):
 		
-		if len(obj_data.data)==0:
-			new_data = DataModel.clsData(set_id,in_collision,breaks,data)
-		else:
-			new_data = DataModel.clsData(obj_data.set_id,obj_data.in_collision,obj_data.breaks,obj_data.data)
-
 		if len(data_list) > 0:
 			for idata in data_list:
+				new_data = DataModel.clsData(idata.set_id,idata.in_collision,idata.breaks,idata.data)
+				self.appendNewOBHB(new_data)
+		else:
+			if len(obj_data.data)==0:
+				new_data = DataModel.clsData(set_id,in_collision,breaks,data)
+			else:
 				new_data = DataModel.clsData(obj_data.set_id,obj_data.in_collision,obj_data.breaks,obj_data.data)
-			pass
 
-		new_obhb = clsOBHB(obj_data = new_data)
-		new_obhb.set_id(len(self.list_of_obhs))
-		self.list_of_obhs.append(new_obhb)
-		pass
+			self.appendNewOBHB(new_data)
+
+	def appendNewOBHB(self, newObhb : DataModel.clsData):
+		new_obhb = clsOBHB(obj_data = newObhb)
+		new_obhb.changeID(len(self.obhbs))
+		self.obhbs.append(new_obhb)
 		#self.list_of_obhs.append (new
+
+
+	def __getitem__(self, i):
+		return self.obhbs[i]
+
+	#@property
+	#def my_attribute(self, i:int):
+	#	return self.obhbs[i]
+
+	#@my_attribute.setter
+	#def my_attribute(self, value):
+	#	# Do something if you want
+	#	self.obhbs = value
 
 
 

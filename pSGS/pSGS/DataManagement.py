@@ -149,7 +149,7 @@ COMMONLY USED COMMANDS
 		domainb = np.array(0.375*np.pi - np.random.rand(N[0],1)*1.25*np.pi)
 		data2 = np.matrix(np.column_stack((r*np.sin(domainb) - p[0],r*np.cos(domainb)- p[1]))) + np.matrix(np.random.rand(N[0],2))
 		cls2.setData(data2)
-
+		
 		return cls1,cls2
 
 

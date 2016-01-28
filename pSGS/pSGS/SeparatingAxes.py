@@ -1,5 +1,9 @@
 import SeparatingAxes
+import OrientedBoundHyperBox
+
 import numpy as np
+
+
 
 class clsSeparatingAxis(object):
 	"""clsSeparatingAxis
@@ -114,7 +118,7 @@ class clsCollisionTest(object):
 		 
 		vCenter = obhb_1.word_ref_center - obhb_2.word_ref_center
 		Axes = []
-		ok = 1
+		has_collision = 1
 		MtrCol = []
 		Dcenter = []
 		dcol = []
@@ -135,15 +139,47 @@ class clsCollisionTest(object):
 			M12 = abs(min(dcol[i],0))
 			MtrCol.append(M12)
 			if (dcol[i] > 0):
-				ok = 0
+				has_collision = 0
 				separating_axes.addAxis(i,obhb_1.set_id, obhb_2.set_id, dcol[i], np.sign(Dcenter[i]))
 
 		if rec == True:
-			ok2, rAxis , M21 = obhb_2.testCollision(obhb_1,False)
+			has_collision_2, rAxis , M21 = SeparatingAxes.clsCollisionTest.CollisionTest(obhb_2,obhb_1,False) # obhb_2.testCollision(obhb_1,False)
 			for individual_axis in rAxis.separatin_axes:
 				separating_axes.addAxis(separatin_axis = individual_axis)
-			ok = min(ok, ok2)
+			has_collision = min(has_collision, has_collision_2)
 			MtrCol.append(M21[0])
 
 
-		return ok, separating_axes, MtrCol 
+		return has_collision, separating_axes, MtrCol 
+
+
+
+	@staticmethod
+	def TestAllAgainstAll(obhbs):
+		"""
+		@obhbs:OrientedBoundHyperBox.clsListofOBHB
+		@obhb_2: clsOBHB
+		@rec: bool
+		returns a tuple (has_collision, separating_axes, MtrCol)
+		"""
+		has_collision = 1
+		separating_axes = SeparatingAxes.clsSeparatingAxesList()
+		MtrCol = []
+
+		isize = len(obhbs.obhbs)
+		
+		for i in range(0,isize):
+			for j in range(i+1,isize):
+				if obhbs[i].set_id != obhbs[j].set_id:
+
+					has_collision_2, rAxis , M21 = SeparatingAxes.clsCollisionTest.CollisionTest(obhbs[i],obhbs[j],True)
+
+					for individual_axis in rAxis.separatin_axes:
+						separating_axes.addAxis(separatin_axis = individual_axis)
+						has_collision = min(has_collision, has_collision_2)
+						MtrCol.append(M21[0])
+
+
+
+
+		return has_collision, separating_axes, MtrCol 
